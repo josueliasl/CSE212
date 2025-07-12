@@ -6,24 +6,44 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 public class PriorityQueueTests
 {
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
-    // Defect(s) Found: 
+    // Scenario: Enqueue three items: (“A”, 1), (“B”, 10), (“C”, 5), then deque all
+    // Expected Result: Items come out in order: B, C, A
+    // Scenario: Enqueue four items: ("X", 3), ("Y", 5), ("Z", 5), ("W", 1), then dequeue all.
+    // Expected Result: Items come out in order: Y, Z, X, W (highest priority first; ties follow FIFO order)
+    
+    //Defects Found:
+    // 1. The Dequeue function was not removing items, so previously dequeued items could be returned again.
+    // 2. When priorities were equal, the wrong item was sometimes removed (did not follow FIFO for same-priority items).
+   
     public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        priorityQueue.Enqueue("A", 1);
+        priorityQueue.Enqueue("B", 10);
+        priorityQueue.Enqueue("C", 5);
+        Assert.AreEqual("B", priorityQueue.Dequeue());
+        Assert.AreEqual("C", priorityQueue.Dequeue());
+        Assert.AreEqual("A", priorityQueue.Dequeue());
     }
 
     [TestMethod]
-    // Scenario: 
-    // Expected Result: 
+    // Scenario: Enqueue four items: ("X", 3), ("Y", 5), ("Z", 5), ("W", 1), then dequeue all.
+    // Expected Result: Items come out in order: Y, Z, X, W (highest priority first; ties follow FIFO order)
     // Defect(s) Found: 
+
+    // 1. The Dequeue function was not removing items, so previously dequeued items could be returned again.
+    // 2. When priorities were equal, the wrong item was sometimes removed (did not follow FIFO for same-priority items).
     public void TestPriorityQueue_2()
     {
         var priorityQueue = new PriorityQueue();
-        Assert.Fail("Implement the test case and then remove this.");
+        priorityQueue.Enqueue("X", 3);
+        priorityQueue.Enqueue("Y", 5);
+        priorityQueue.Enqueue("Z", 5);
+        priorityQueue.Enqueue("W", 1);
+        Assert.AreEqual("Y", priorityQueue.Dequeue());
+        Assert.AreEqual("Z", priorityQueue.Dequeue());
+        Assert.AreEqual("X", priorityQueue.Dequeue());
+        Assert.AreEqual("W", priorityQueue.Dequeue());
     }
 
-    // Add more test cases as needed below.
 }
