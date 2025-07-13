@@ -10,11 +10,11 @@ public class PriorityQueueTests
     // Expected Result: Items come out in order: B, C, A
     // Scenario: Enqueue four items: ("X", 3), ("Y", 5), ("Z", 5), ("W", 1), then dequeue all.
     // Expected Result: Items come out in order: Y, Z, X, W (highest priority first; ties follow FIFO order)
-    
+
     //Defects Found:
     // 1. The Dequeue function was not removing items, so previously dequeued items could be returned again.
     // 2. When priorities were equal, the wrong item was sometimes removed (did not follow FIFO for same-priority items).
-   
+
     public void TestPriorityQueue_1()
     {
         var priorityQueue = new PriorityQueue();
@@ -44,6 +44,17 @@ public class PriorityQueueTests
         Assert.AreEqual("Z", priorityQueue.Dequeue());
         Assert.AreEqual("X", priorityQueue.Dequeue());
         Assert.AreEqual("W", priorityQueue.Dequeue());
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(InvalidOperationException))]
+    // Scenario: Attempt to dequeue from an empty queue.
+    // Expected Result: InvalidOperationException is thrown.
+    // Defect(s) Found: None
+    public void TestPriorityQueue_EmptyDequeue()
+    {
+        var priorityQueue = new PriorityQueue();
+        priorityQueue.Dequeue();// This should throw an exception since the queue is empty.
     }
 
 }
