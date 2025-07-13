@@ -50,7 +50,7 @@ public class PriorityQueueTests
     [ExpectedException(typeof(InvalidOperationException))]
     // Scenario: Attempt to dequeue from an empty queue.
     // Expected Result: InvalidOperationException is thrown.
-    // Defect(s) Found: None
+    // Defect(s) Found: I found none
     public void TestPriorityQueue_EmptyDequeue()
     {
         var priorityQueue = new PriorityQueue();
