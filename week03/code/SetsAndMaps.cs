@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Text.Json;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 public static class SetsAndMaps
 {
@@ -21,10 +23,42 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
-    }
+        var seen = new HashSet<string>();
+        var pairs = new HashSet<(string, string)>();
 
+        foreach (var word in words)
+        {
+            var reversed = Reverse(word);
+            if (seen.Contains(reversed))
+            {
+                var first = string.Compare(word, reversed) < 0 ? word : reversed;
+                var second = string.Compare(word, reversed) < 0 ? reversed : word;
+                pairs.Add((first, second));
+            }
+            seen.Add(word);
+        }
+        var result = new string[pairs.Count];
+        int i = 0;
+        foreach (var (a, b) in pairs)
+        {
+            result[i++] = $"{a} & {b}";
+        }
+        return result;
+    }
+    private static string Reverse(string s)
+    {
+        char[] arr = s.ToCharArray();
+        int left = 0, right = arr.Length - 1;
+        while (left < right)
+        {
+            var temp = arr[left];
+            arr[left++] = arr[right];
+            arr[right--] = temp;
+        }
+        return new string(arr);
+
+
+    }
     /// <summary>
     /// Read a census file and summarize the degrees (education)
     /// earned by those contained in the file.  The summary
@@ -42,9 +76,19 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            if (fields.Length > 3)
+            {
+                var degree = fields[3].Trim();
+                if (degrees.ContainsKey(degree))
+                {
+                    degrees[degree] += 1;
+                }
+                else
+                {
+                    degrees[degree] = 1;
+                }
+            }
         }
-
         return degrees;
     }
 
@@ -64,11 +108,43 @@ public static class SetsAndMaps
     /// Reminder: You can access a letter by index in a string by 
     /// using the [] notation.
     /// </summary>
-    public static bool IsAnagram(string word1, string word2)
+    public static bool IsAnagram(string s1, string s2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        int[] counts = new int[26];
+        int length1 = 0, length2 = 0;
+        foreach (char c in s1)
+        {
+            if (char.IsWhiteSpace(c)) continue;
+            char lower = char.ToLower(c);
+            if (lower >= 'a' && lower <= 'z')
+            {
+                counts[lower - 'a']++;
+                length1++;
+            }
+        }
+        foreach (char c in s2)
+        {
+            if (char.IsWhiteSpace(c)) continue;
+            char lower = char.ToLower(c);
+            if (lower >= 'a' && lower <= 'z')
+            {
+                counts[lower - 'a']--;
+                length2++;
+            }
+        }
+        if (length1 != length2) return false;
+        for (int i = 0; i < 26; i++)
+        {
+            if (counts[i] != 0) return false;
+        }
+        return true;
+
     }
+
+
+
+
+
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
@@ -84,6 +160,7 @@ public static class SetsAndMaps
     /// https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
     /// 
     /// </summary>
+    /// 
     public static string[] EarthquakeDailySummary()
     {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
@@ -103,4 +180,5 @@ public static class SetsAndMaps
         // 3. Return an array of these string descriptions.
         return [];
     }
+
 }
