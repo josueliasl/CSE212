@@ -198,6 +198,7 @@ public class LinkedList : IEnumerable<int>
     /// <summary>
     /// Iterate backward through the Linked List
     /// </summary>
+    /// 
     public IEnumerable Reverse()
     {
         var curr = _tail;
